@@ -65,6 +65,33 @@ class AlunoService{
 
         return novoAluno;
     }
+
+    async update(id, dados){
+        const idNumerico = Number(id);
+        if(!Number.isInteger(idNumerico)){
+            throw new AlunoInvalidoError("Id inválido.");
+        }
+
+        const alunoExistente = await prisma.aluno.findUnique({
+            where: { id: idNumerico }
+        });
+
+        if(!alunoExistente){
+            throw new AlunoNaoEncontradoError();
+        }
+
+        const {nome, email} = dados;
+        if(!nome || !email){
+            throw new AlunoInvalidoError();
+        }
+
+        const alunoAtualizado = await prisma.aluno.update({
+            where: { id: idNumerico },
+            data: { nome, email }
+        });
+
+        return alunoAtualizado;
+    }
 }
 
 module.exports = new AlunoService();
