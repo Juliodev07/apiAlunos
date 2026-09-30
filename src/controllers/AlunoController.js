@@ -5,14 +5,14 @@ class AlunoController{
     async findMany(request, response){
         try{
             let {page, pageSize, orderBy, order} = request.query;
-            page ||= 1;
-            pageSize ||= 10;
+            page = Number(page) || 1;
+            pageSize = Number(pageSize) || 10;
             orderBy ||= "id";
-            order ||= request.query.tipoOrdenacao || "asc";
+            order ||= "asc";
             order = String(order).toLowerCase();
 
-        const alunos = await alunoService.findMany(page, pageSize);
-        return response.status(200).json({alunos});
+            const { alunos, total } = await alunoService.findMany(page, pageSize, orderBy, order);
+            return response.status(200).json({ alunos, total, page, pageSize });
         }catch(e){
             console.log(e);
             return response.status(e.statusCode || 500).json({error: e.message});

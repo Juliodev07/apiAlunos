@@ -6,7 +6,7 @@ const CAMPOS_ORDENAVEIS = ["id", "nome", "email", "createdAt", "updatedAt"];
 const DIRECOES = ["asc", "desc"];
 class AlunoService{
 
-    async findMany(page, pageSize){
+    async findMany(page, pageSize, orderBy, order){
         if(!CAMPOS_ORDENAVEIS.includes(orderBy)){
             throw new AlunoInvalidoError(
                 `Campo de ordenação inválido. Use um destes: ${CAMPOS_ORDENAVEIS.join(", ")}.`
